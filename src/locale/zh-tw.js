@@ -1,3 +1,4 @@
+// Chinese (Taiwan) [zh-tw]
 import dayjs from 'dayjs'
 
 const locale = {
@@ -8,6 +9,18 @@ const locale = {
   months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
   monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
   ordinal: n => `${n}日`,
+  formats: {
+    LT: 'HH:mm',
+    LTS: 'HH:mm:ss',
+    L: 'YYYY/MM/DD',
+    LL: 'YYYY年M月D日',
+    LLL: 'YYYY年M月D日 HH:mm',
+    LLLL: 'YYYY年M月D日dddd HH:mm',
+    l: 'YYYY/M/D',
+    ll: 'YYYY年M月D日',
+    lll: 'YYYY年M月D日 HH:mm',
+    llll: 'YYYY年M月D日dddd HH:mm'
+  },
   relativeTime: {
     future: '%s內',
     past: '%s前',
@@ -28,3 +41,4 @@ const locale = {
 dayjs.locale(locale, null, true)
 
 export default locale
+

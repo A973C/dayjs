@@ -24,18 +24,27 @@
 > Day.js 是一个轻量的处理时间和日期的 JavaScript 库，和 Moment.js 的 API 设计保持完全一样. 如果您曾经用过 Moment.js, 那么您已经知道如何使用 Day.js
 
 ```js
-dayjs().startOf('month').add(1, 'day').set('year', 2018).format('YYYY-MM-DD HH:mm:ss');
+dayjs()
+  .startOf('month')
+  .add(1, 'day')
+  .set('year', 2018)
+  .format('YYYY-MM-DD HH:mm:ss')
 ```
 
-* 🕒 和 Moment.js 相同的 API 和用法
-* 💪 不可变数据 (Immutable)
-* 🔥 支持链式操作 (Chainable)
-* 🌐 国际化 I18n
-* 📦 仅 2kb 大小的微型库
-* 👫 全浏览器兼容
+- 🕒 和 Moment.js 相同的 API 和用法
+- 💪 不可变数据 (Immutable)
+- 🔥 支持链式操作 (Chainable)
+- 🌐 国际化 I18n
+- 📦 仅 2kb 大小的微型库
+- 👫 全浏览器兼容
+
 ---
 
 ## 快速开始
+
+### 文档
+
+访问 [day.js.org](https://day.js.org/) 网站查看更详细的文档
 
 ### 安装
 
@@ -43,7 +52,7 @@ dayjs().startOf('month').add(1, 'day').set('year', 2018).format('YYYY-MM-DD HH:m
 npm install dayjs --save
 ```
 
-📚[安装指南](./Installation.md)
+📚[安装指南](https://day.js.org/docs/zh-CN/installation/installation)
 
 ### API
 
@@ -54,14 +63,16 @@ dayjs('2018-08-08') // 解析
 
 dayjs().format('{YYYY} MM-DDTHH:mm:ss SSS [Z] A') // 展示
 
-dayjs().set('month', 3).month() // 获取
+dayjs()
+  .set('month', 3)
+  .month() // 获取
 
 dayjs().add(1, 'year') // 处理
 
 dayjs().isBefore(dayjs()) // 查询
 ```
 
-📚[API 参考](./API-reference.md)
+📚[API 参考](https://day.js.org/docs/zh-CN/parse/parse)
 
 ### 国际化 I18n
 
@@ -74,9 +85,12 @@ import 'dayjs/locale/es' // 按需加载
 
 dayjs.locale('es') // 全局使用西班牙语
 
-dayjs('2018-05-05').locale('zh-cn').format() // 在这个实例上使用简体中文
+dayjs('2018-05-05')
+  .locale('zh-cn')
+  .format() // 在这个实例上使用简体中文
 ```
-📚[国际化 I18n](./I18n.md)
+
+📚[国际化 I18n](https://day.js.org/docs/zh-CN/i18n/i18n)
 
 ### 插件
 
@@ -89,7 +103,8 @@ dayjs.extend(advancedFormat) // 使用插件
 
 dayjs().format('Q Do k kk X x') // 使用扩展后的API
 ```
-📚[插件列表](./Plugin.md)
+
+📚[插件列表](https://day.js.org/docs/zh-CN/plugin/plugin)
 
 ## 开源协议
 

@@ -6,20 +6,23 @@ const padStart = (string, length, pad) => {
   return `${Array((length + 1) - s.length).join(pad)}${string}`
 }
 
-const padZoneStr = (negMinuts) => {
-  const minutes = Math.abs(negMinuts)
+const padZoneStr = (instance) => {
+  const negMinutes = -instance.utcOffset()
+  const minutes = Math.abs(negMinutes)
   const hourOffset = Math.floor(minutes / 60)
   const minuteOffset = minutes % 60
-  return `${negMinuts <= 0 ? '+' : '-'}${padStart(hourOffset, 2, '0')}:${padStart(minuteOffset, 2, '0')}`
+  return `${negMinutes <= 0 ? '+' : '-'}${padStart(hourOffset, 2, '0')}:${padStart(minuteOffset, 2, '0')}`
 }
 
 const monthDiff = (a, b) => {
   // function from moment.js in order to keep the same result
+  if (a.date() < b.date()) return -monthDiff(b, a)
   const wholeMonthDiff = ((b.year() - a.year()) * 12) + (b.month() - a.month())
-  const anchor = a.clone().add(wholeMonthDiff, 'months')
+  const anchor = a.clone().add(wholeMonthDiff, C.M)
   const c = b - anchor < 0
-  const anchor2 = a.clone().add(wholeMonthDiff + (c ? -1 : 1), 'months')
-  return Number(-(wholeMonthDiff + ((b - anchor) / (c ? (anchor - anchor2) : (anchor2 - anchor)))))
+  const anchor2 = a.clone().add(wholeMonthDiff + (c ? -1 : 1), C.M)
+  return +(-(wholeMonthDiff + ((b - anchor) / (c ? (anchor - anchor2) :
+    (anchor2 - anchor)))) || 0)
 }
 
 const absFloor = n => (n < 0 ? Math.ceil(n) || 0 : Math.floor(n))
@@ -30,10 +33,12 @@ const prettyUnit = (u) => {
     y: C.Y,
     w: C.W,
     d: C.D,
+    D: C.DATE,
     h: C.H,
     m: C.MIN,
     s: C.S,
-    ms: C.MS
+    ms: C.MS,
+    Q: C.Q
   }
   return special[u] || String(u || '').toLowerCase().replace(/s$/, '')
 }
@@ -41,10 +46,10 @@ const prettyUnit = (u) => {
 const isUndefined = s => s === undefined
 
 export default {
-  padStart,
-  padZoneStr,
-  monthDiff,
-  absFloor,
-  prettyUnit,
-  isUndefined
+  s: padStart,
+  z: padZoneStr,
+  m: monthDiff,
+  a: absFloor,
+  p: prettyUnit,
+  u: isUndefined
 }

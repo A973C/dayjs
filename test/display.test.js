@@ -2,6 +2,7 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import dayjs from '../src'
 import th from '../src/locale/th'
+import '../src/locale/ja'
 
 beforeEach(() => {
   MockDate.set(new Date())
@@ -13,6 +14,11 @@ afterEach(() => {
 
 it('Format no formatStr', () => {
   expect(dayjs().format()).toBe(moment().format())
+})
+
+it('Format invalid date', () => {
+  expect(dayjs('').format()).toBe(new Date('').toString())
+  expect(dayjs('otherString').format()).toBe(new Date('otherString').toString())
 })
 
 it('Format Year YY YYYY', () => {
@@ -45,27 +51,45 @@ it('Format Hour H HH 24-hour', () => {
 })
 
 it('Format Hour h hh 12-hour', () => {
-  MockDate.set(new Date('2018-05-02T00:00:00.000'))
-  expect(dayjs().format('h')).toBe(moment().format('h'))
-  expect(dayjs().format('hh')).toBe(moment().format('hh'))
+  const time = '2018-05-02T00:00:00.000'
+  const expected = '12'
+  expect(dayjs(time).format('h')).toBe(expected)
+  expect(dayjs(time).format('h')).toBe(moment(time).format('h'))
+  expect(dayjs(time).format('hh')).toBe(expected)
+  expect(dayjs(time).format('hh')).toBe(moment(time).format('hh'))
 
-  MockDate.set(new Date('2018-05-02T01:00:00.000'))
-  expect(dayjs().format('h')).toBe(moment().format('h'))
-  expect(dayjs().format('hh')).toBe(moment().format('hh'))
+  const time2 = '2018-05-02T01:00:00.000'
+  expect(dayjs(time2).format('h')).toBe(moment(time2).format('h'))
+  expect(dayjs(time2).format('h')).toBe('1')
+  expect(dayjs(time2).format('hh')).toBe(moment(time2).format('hh'))
+  expect(dayjs(time2).format('hh')).toBe('01')
 
-  MockDate.set(new Date('2018-05-02T23:00:00.000'))
-  expect(dayjs().format('h')).toBe(moment().format('h'))
-  expect(dayjs().format('hh')).toBe(moment().format('hh'))
+  const time3 = '2018-05-02T23:00:00.000'
+  const expected3 = '11'
+  expect(dayjs(time3).format('h')).toBe(moment(time3).format('h'))
+  expect(dayjs(time3).format('h')).toBe(expected3)
+  expect(dayjs(time3).format('hh')).toBe(moment(time3).format('hh'))
+  expect(dayjs(time3).format('hh')).toBe(expected3)
 })
 
 it('Format meridiens a A am / pm', () => {
-  MockDate.set(new Date('2018-05-02T01:00:00.000'))
-  expect(dayjs().format('a')).toBe(moment().format('a'))
-  expect(dayjs().format('A')).toBe(moment().format('A'))
+  const time = '2018-05-02T01:00:00.000'
+  expect(dayjs(time).format('a')).toBe('am')
+  expect(dayjs(time).format('a')).toBe(moment(time).format('a'))
+  expect(dayjs(time).format('A')).toBe('AM')
+  expect(dayjs(time).format('A')).toBe(moment(time).format('A'))
+  expect(dayjs(time).locale('ja').format('a')).toBe('午前')
+  expect(dayjs(time).locale('ja').format('a'))
+    .toBe(moment(time).locale('ja').format('a'))
 
-  MockDate.set(new Date('2018-05-02T23:00:00.000'))
-  expect(dayjs().format('a')).toBe(moment().format('a'))
-  expect(dayjs().format('A')).toBe(moment().format('A'))
+  const time2 = '2018-05-02T23:00:00.000'
+  expect(dayjs(time2).format('a')).toBe('pm')
+  expect(dayjs(time2).format('a')).toBe(moment(time2).format('a'))
+  expect(dayjs(time2).format('A')).toBe('PM')
+  expect(dayjs(time2).format('A')).toBe(moment(time2).format('A'))
+  expect(dayjs(time2).locale('ja').format('a')).toBe('午後')
+  expect(dayjs(time2).locale('ja').format('a'))
+    .toBe(moment(time2).locale('ja').format('a'))
 })
 
 it('Format Minute m mm', () => {
@@ -80,7 +104,6 @@ it('Format Second s ss SSS', () => {
   const date = '2011-11-05T14:48:01.002Z'
   expect(dayjs(date).format('s-ss-SSS')).toBe(moment(date).format('s-ss-SSS'))
 })
-
 
 it('Format Time Zone ZZ', () => {
   MockDate.set(new Date('2018-05-02T23:00:00.000'), 60 * 8)
@@ -99,9 +122,28 @@ it('Format Time Zone ZZ', () => {
 })
 
 it('Format ddd dd MMM with short locale', () => {
-  expect(dayjs().locale(th).format('dd')).toBe(moment().locale('th').format('dd'))
-  expect(dayjs().locale(th).format('ddd')).toBe(moment().locale('th').format('ddd'))
-  expect(dayjs().locale(th).format('MMM')).toBe(moment().locale('th').format('MMM'))
+  expect(dayjs()
+    .locale(th)
+    .format('dd')).toBe(moment()
+    .locale('th')
+    .format('dd'))
+  expect(dayjs()
+    .locale(th)
+    .format('ddd')).toBe(moment()
+    .locale('th')
+    .format('ddd'))
+  expect(dayjs()
+    .locale(th)
+    .format('MMM')).toBe(moment()
+    .locale('th')
+    .format('MMM'))
+})
+
+it('Format token value is 0', () => {
+  const sundayDate = '2000-01-02'
+  const sundayStr = 'd H m s'
+  expect(dayjs(sundayDate).format(sundayStr))
+    .toBe(moment(sundayDate).format(sundayStr))
 })
 
 it('Format Complex with other string - : / ', () => {
@@ -110,7 +152,9 @@ it('Format Complex with other string - : / ', () => {
 })
 
 it('Format Escaping characters', () => {
-  const string = '[Z] Z'
+  let string = '[Z] Z'
+  expect(dayjs().format(string)).toBe(moment().format(string))
+  string = '[Z] Z [Z]'
   expect(dayjs().format(string)).toBe(moment().format(string))
 })
 
@@ -164,6 +208,17 @@ describe('Difference', () => {
       expect(dayjsA.diff(dayjsC, unit, true)).toBe(momentA.diff(momentC, unit, true))
     })
   })
+
+  it('MonthDiff', () => {
+    expect(dayjs('2018-08-08').diff(dayjs('2018-08-08'), 'month')).toEqual(0)
+    expect(dayjs('2018-09-08').diff(dayjs('2018-08-08'), 'month')).toEqual(1)
+    expect(dayjs('2018-08-08').diff(dayjs('2018-09-08'), 'month')).toEqual(-1)
+    expect(dayjs('2018-01-01').diff(dayjs('2018-01-01'), 'month')).toEqual(0)
+  })
+
+  it('undefined edge case', () => {
+    expect(dayjs().diff(undefined, 'seconds')).toBeDefined()
+  })
 })
 
 it('Unix Timestamp (milliseconds)', () => {
@@ -179,6 +234,11 @@ it('Days in Month', () => {
   expect(dayjs('20140201').daysInMonth()).toBe(moment('20140201').daysInMonth())
 })
 
+it('Utc Offset', () => {
+  expect(dayjs('2013-01-01T00:00:00.000').utcOffset()).toBe(moment('2013-01-01T00:00:00.000').utcOffset())
+  expect(dayjs('2013-01-01T05:00:00.000').utcOffset()).toBe(moment('2013-01-01T05:00:00.000').utcOffset())
+})
+
 it('As Javascript Date -> toDate', () => {
   const base = dayjs()
   const momentBase = moment()
@@ -190,18 +250,13 @@ it('As Javascript Date -> toDate', () => {
   expect(jsDate.toUTCString()).not.toBe(base.toString())
 })
 
-it('As Array -> toArray', () => {
-  expect(dayjs().toArray()).toEqual(moment().toArray())
-})
-
 it('As JSON -> toJSON', () => {
   expect(dayjs().toJSON()).toBe(moment().toJSON())
+  global.console.warn = jest.genMockFunction()// moment.js otherString will throw warn
+  expect(dayjs('otherString').toJSON()).toBe(moment('otherString').toJSON())
+  expect(dayjs('otherString').toJSON()).toBe(null)
 })
 
 it('As ISO 8601 String -> toISOString e.g. 2013-02-04T22:44:30.652Z', () => {
   expect(dayjs().toISOString()).toBe(moment().toISOString())
-})
-
-it('As Object -> toObject', () => {
-  expect(dayjs().toObject()).toEqual(moment().toObject())
 })

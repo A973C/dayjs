@@ -1,6 +1,8 @@
 import moment from 'moment'
 import MockDate from 'mockdate'
 import dayjs from '../src'
+import '../src/locale/zh-cn'
+import '../src/locale/ar'
 
 beforeEach(() => {
   MockDate.set(new Date())
@@ -23,6 +25,19 @@ describe('StartOf EndOf', () => {
   it('StartOf EndOf Other -> no change', () => {
     expect(dayjs().startOf('otherString').valueOf()).toBe(moment().startOf('otherString').valueOf())
     expect(dayjs().endOf('otherString').valueOf()).toBe(moment().endOf('otherString').valueOf())
+  })
+
+  it('StartOf week with locale', () => {
+    const testDate = [undefined, '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16']
+    const testLocale = ['zh-cn', 'ar', 'en']
+    testDate.forEach((d) => {
+      testLocale.forEach((l) => {
+        expect(dayjs(d).locale(l).startOf('week').date())
+          .toBe(moment(d).locale(l).startOf('week').date())
+        expect(dayjs(d).locale(l).endOf('week').date())
+          .toBe(moment(d).locale(l).endOf('week').date())
+      })
+    })
   })
 })
 
@@ -47,6 +62,13 @@ it('Add Time days', () => {
   expect(dayjs('20160229').add(1, 'year').valueOf()).toBe(moment('20160229').add(1, 'year').valueOf())
 
   expect(dayjs().add('2', 'years').valueOf()).toBe(moment().add('2', 'years').valueOf())
+})
+
+it('Add Time with decimal', () => {
+  expect(dayjs().add(0.4, 'day').valueOf()).toBe(moment().add(0.4, 'day').valueOf())
+  expect(dayjs().add(0.5, 'day').valueOf()).toBe(moment().add(0.5, 'day').valueOf())
+  expect(dayjs().add(0.4, 'week').valueOf()).toBe(moment().add(0.4, 'week').valueOf())
+  expect(dayjs().add(0.5, 'week').valueOf()).toBe(moment().add(0.5, 'week').valueOf())
 })
 
 it('Subtract Time days', () => {

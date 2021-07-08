@@ -1,9 +1,23 @@
+// French [fr]
 import dayjs from 'dayjs'
 
 const locale = {
   name: 'fr',
-  weekdays: 'Dimanche_Lundi_Mardi_Mercredi_Jeudi_Vendredi_Samedi'.split('_'),
-  months: 'Janvier_Février_Mars_Avril_Mai_Juin_Juillet_Août_Septembre_Octobre_Novembre_Décembre'.split('_'),
+  weekdays: 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
+  weekdaysShort: 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
+  weekdaysMin: 'di_lu_ma_me_je_ve_sa'.split('_'),
+  months: 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
+  monthsShort: 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
+  weekStart: 1,
+  yearStart: 4,
+  formats: {
+    LT: 'HH:mm',
+    LTS: 'HH:mm:ss',
+    L: 'DD/MM/YYYY',
+    LL: 'D MMMM YYYY',
+    LLL: 'D MMMM YYYY HH:mm',
+    LLLL: 'dddd D MMMM YYYY HH:mm'
+  },
   relativeTime: {
     future: 'dans %s',
     past: 'il y a %s',
@@ -19,7 +33,10 @@ const locale = {
     y: 'un an',
     yy: '%d ans'
   },
-  ordinal: n => `${n}º`
+  ordinal: (n) => {
+    const o = n === 1 ? 'er' : ''
+    return `${n}${o}`
+  }
 }
 
 dayjs.locale(locale, null, true)
